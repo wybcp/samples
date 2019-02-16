@@ -14,35 +14,37 @@ func init() {
 	urlcache, _ = cache.NewCache("memory", `{"interval":0}`)
 }
 
+// ShortResult 结构
 type ShortResult struct {
-	UrlShort string
-	UrlLong  string
+	URLShort string
+	URLLong  string
 }
-
+// ShortController 短URL控制器
 type ShortController struct {
 	beego.Controller
 }
-// Use Get rather than Post so that we can simulate easier in the browser
-func (this *ShortController) Get() {
+
+// Get we can simulate easier in the browser
+func (S *ShortController) Get() {
 	var result ShortResult
-	longurl := this.Input().Get("longurl")
+	longurl := S.Input().Get("longurl")
 	beego.Info(longurl)
-	result.UrlLong = longurl
+	result.URLLong = longurl
 	urlmd5 := models.GetMD5(longurl)
 	beego.Info(urlmd5)
 	if urlcache.IsExist(urlmd5) {
-		result.UrlShort = urlcache.Get(urlmd5).(string)
+		result.URLShort = urlcache.Get(urlmd5).(string)
 	} else {
-		result.UrlShort = models.Generate()
-		err := urlcache.Put(urlmd5, result.UrlShort, 0)
+		result.URLShort = models.Generate()
+		err := urlcache.Put(urlmd5, result.URLShort, 0)
 		if err != nil {
 			beego.Info(err)
 		}
-		err = urlcache.Put(result.UrlShort, longurl, 0)
+		err = urlcache.Put(result.URLShort, longurl, 0)
 		if err != nil {
 			beego.Info(err)
 		}
 	}
-	this.Data["json"] = result
-	this.ServeJSON()
+	S.Data["json"] = result
+	S.ServeJSON()
 }

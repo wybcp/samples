@@ -22,7 +22,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/beego/samples/WebIM/models"
 )
-
+// Subscription 订阅结构
 type Subscription struct {
 	Archive []models.Event      // All the events from the archive.
 	New     <-chan models.Event // New events coming in.
@@ -31,15 +31,15 @@ type Subscription struct {
 func newEvent(ep models.EventType, user, msg string) models.Event {
 	return models.Event{ep, user, int(time.Now().Unix()), msg}
 }
-
+// Join 用户订阅
 func Join(user string, ws *websocket.Conn) {
 	subscribe <- Subscriber{Name: user, Conn: ws}
 }
-
+// Leave 用户退出订阅
 func Leave(user string) {
 	unsubscribe <- user
 }
-
+// Subscriber 订阅者结构
 type Subscriber struct {
 	Name string
 	Conn *websocket.Conn // Only for WebSocket users; otherwise nil.

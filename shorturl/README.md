@@ -9,12 +9,12 @@ This sample is a API application based on beego. It has two API func:
 
 ## Installation
 
-```
+```sh
 cd $GOPATH/src/samples/shorturl
 bee run
 ```
 
-## Usage:
+## Usage
 
 ```
 # shortening url example

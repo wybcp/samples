@@ -4,19 +4,21 @@ import (
 	"github.com/astaxie/beego"
 )
 
+// ExpandController 结构
 type ExpandController struct {
 	beego.Controller
 }
 
-func (this *ExpandController) Get() {
+// Get 获取
+func (E *ExpandController) Get() {
 	var result ShortResult
-	shorturl := this.Input().Get("shorturl")
-	result.UrlShort = shorturl
+	shorturl := E.Input().Get("shorturl")
+	result.URLShort = shorturl
 	if urlcache.IsExist(shorturl) {
-		result.UrlLong = urlcache.Get(shorturl).(string)
+		result.URLLong = urlcache.Get(shorturl).(string)
 	} else {
-		result.UrlLong = ""
+		result.URLLong = ""
 	}
-	this.Data["json"] = result
-	this.ServeJSON()
+	E.Data["json"] = result
+	E.ServeJSON()
 }
